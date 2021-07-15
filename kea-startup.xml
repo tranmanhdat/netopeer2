@@ -1,0 +1,6 @@
+<config xmlns="urn:ietf:params:xml:ns:yang:kea-dhcp6-server">
+  <control-socket>
+    <socket-name>/home/src/.control_socket</socket-name>
+    <socket-type>unix</socket-type>
+  </control-socket>
+</config>

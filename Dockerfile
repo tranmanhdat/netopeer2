@@ -1,0 +1,78 @@
+FROM ubuntu:18.04 
+RUN apt-get update
+RUN apt-get install -y git cmake build-essential bison flex libpcre3-dev \
+  libev-dev libavl-dev libprotobuf-c-dev protobuf-c-compiler \
+  swig python-dev lua5.2 pkg-config libpcre++-dev openssl \
+  libssl1.0-dev libcrypto++-dev wget libpcre2-dev libboost1.65-all-dev liblog4cplus-dev  autoconf
+WORKDIR /root/src
+RUN wget https://github.com/CESNET/libyang/archive/v1.0-r3.tar.gz && \
+  tar -xf v1.0-r3.tar.gz && \
+  rm v1.0-r3.tar.gz && \
+  cd libyang-1.0-r3 && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install
+WORKDIR /root/src
+RUN wget https://github.com/sysrepo/sysrepo/archive/v0.7.8.tar.gz && \
+  tar -xf v0.7.8.tar.gz && \
+  rm v0.7.8.tar.gz && \
+  cd sysrepo-0.7.8 && mkdir build && cd build && \
+  cmake -DCMAKE_BUILD_TYPE=Release .. && \
+  make && \
+  make install
+RUN ldconfig
+RUN sysrepod
+WORKDIR /root/src
+RUN wget http://www.zlib.net/zlib-1.2.11.tar.xz && \
+  tar -xf zlib-1.2.11.tar.xz && \
+  rm zlib-1.2.11.tar.xz && \
+  cd zlib-1.2.11 && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install
+WORKDIR /root/src
+RUN wget https://git.libssh.org/projects/libssh.git/snapshot/libssh-0.8.6.tar.gz && \
+  tar -xf libssh-0.8.6.tar.gz && \
+  rm libssh-0.8.6.tar.gz && \
+  cd libssh-0.8.6 && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install
+WORKDIR /root/src
+RUN git clone https://github.com/CESNET/libnetconf2.git && \
+  cd libnetconf2 && \
+  git checkout 526f9f8d09b415a7df1cba4b5dcfc4705ad6f29b && \
+  mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install
+RUN ldconfig
+WORKDIR /root/src
+RUN wget https://github.com/CESNET/Netopeer2/archive/v0.7-r1.tar.gz && \
+  tar -xf v0.7-r1.tar.gz && \
+  rm v0.7-r1.tar.gz && \
+  cd netopeer2-0.7-r1 && \
+  cd keystored && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install && \
+  cd ../../server && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install && \
+  cd ../../cli/ && mkdir build && cd build && \
+  cmake .. && \
+  make && \
+  make install
+RUN ldconfig
+WORKDIR /root/src
+
+
+RUN wget https://ftp.isc.org/isc/kea/1.6.0/kea-1.6.0.tar.gz && \
+  tar -xf kea-1.6.0.tar.gz && \
+  rm kea-1.6.0.tar.gz && \
+  cd kea-1.6.0 && \
+  autoreconf -if && \
+  ./configure --prefix=/home/src/kea-bin --with-sysrepo && \
+  make && \
+  make install

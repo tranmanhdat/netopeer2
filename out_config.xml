@@ -1,0 +1,53 @@
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+<netconf-server xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-server">
+  <listen>
+    <endpoint>
+      <name>all-interfaces</name>
+      <ssh>
+        <address>0.0.0.0</address>
+        <port>830</port>
+        <host-keys>
+          <host-key>
+            <name>imported SSH key</name>
+            <public-key>ssh_host_rsa_key</public-key>
+          </host-key>
+        </host-keys>
+      </ssh>
+    </endpoint>
+    <max-sessions>0</max-sessions>
+    <idle-timeout>3600</idle-timeout>
+  </listen>
+  <session-options>
+    <hello-timeout>600</hello-timeout>
+  </session-options>
+</netconf-server>
+<system xmlns="urn:ietf:params:xml:ns:yang:ietf-system">
+  <authentication>
+    <user>
+      <name>root</name>
+      <authorized-key>
+        <name>id_rsa</name>
+        <algorithm>ssh-rsa</algorithm>
+        <key-data>AAAAB3NzaC1yc2EAAAADAQABAAABAQDJGbtoTPugkk6sBUkYJ6zMuXWHFgaBQzm2HMGPiin8WnW6Ae/3a6RvIrwqHf9Jy6omA3/nKUMStHNUO0qkA4CxRCVVuQqvxQyL6CqVgMezXPuQbAyYd3qqjL0rUr901XdiYP5pkVxZerP1T+tE3RYBPd4XvqnXWgMNW6kgf6lxFOvkUNmuJnSyxOjRJAsjziKs/OomVI5mL7tnIt1xKpMeFfVAS/27HLkY6Ji18p14wad0CSbv68AoK3yOQlruKJWR8Po4mXh09zArEQDKKlLd5ZM0ASCuNulscGwMZV/057lgffKeN1TE/bD8L9t+DonsylFxvYnSx+xK8YTsJm+3</key-data>
+      </authorized-key>
+    </user>
+  </authentication>
+</system>
+<config xmlns="urn:ietf:params:xml:ns:yang:kea-dhcp6-server">
+  <subnet6>
+    <id>1</id>
+    <pool>
+      <start-address>2001:db8::1:0</start-address>
+      <end-address>2001:db8::1:1</end-address>
+    </pool>
+    <subnet>2001:db8::/64</subnet>
+  </subnet6>
+  <interfaces-config>
+    <interfaces>eth0</interfaces>
+  </interfaces-config>
+  <control-socket>
+    <socket-name>/home/src/.control_socket</socket-name>
+    <socket-type>unix</socket-type>
+  </control-socket>
+</config>
+</config>
